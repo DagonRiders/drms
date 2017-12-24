@@ -1,0 +1,38 @@
+BODY
+{
+	background: black;
+	color: #bcf;
+	font-size: 20px;
+	font-family: Calibri, sans-serif;
+}
+h1
+{
+	font-size: 50px;
+	line-height: 1;
+	margin: 0;
+}
+h2
+{
+	margin: 0;
+	margin-top: .5em;
+}
+#switches
+{
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+}
+.switch
+{
+	padding: 1em;
+	border: 1px solid rgba(220, 240, 255, 0.2);
+	margin: 1em 1em 0em 0;
+	max-width: 300px;
+	min-width: 300px;
+	text-align: center;
+}
+.active
+{
+	background: rgba(220, 240, 255, 1);
+	color: black;
+}
