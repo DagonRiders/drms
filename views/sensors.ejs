@@ -1,0 +1,7 @@
+<% if (sensors.length) { %>
+	<ul id="sensors">
+		<% sensors.forEach(function(sensor){ %>
+  			<li class='sensor' id='s<%= sensor.sensorID %>'></li>
+		<% }) %>
+	</ul>
+<% } %>

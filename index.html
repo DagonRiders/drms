@@ -3,93 +3,143 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" href="css.css" />
-	<script src="webdis.js"></script>
+	<link rel="stylesheet" href="css.css">
+	<script src="config.js"></script>
+	<script src="webdis2.js"></script>
 	<script src="utils.js"></script>
 	<script src="querystring.js"></script>
-	<script src="conf.js"></script>
+	<script src="skycons.js"></script>
+	<script src="ejs.js"></script>
+	<script src="ejs-browser-async.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script>
-		// Store the current state of the system
-		var sensors = [];
-		var switches = [];
-		var states = [];
+<script>
+	var sensors = [];
+	var switches = [];
+	var states = [];
+	var rooms = [];
+	var weather = {};
 
-		// Toggles a switch on a particular pack
-		function toggle(togglePack, toggleSwitch)
+	function pad(n, width, z) {
+	  z = z || '0';
+	  n = n + '';
+	  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+	}
+
+	function toggle(togglePack, toggleSwitch)
+	{
+		console.log("Toggling pack " + togglePack + " switch " + toggleSwitch);
+		states[togglePack] = SetSwitch(
+			states[togglePack], 
+			toggleSwitch, 
+			ReadSwitch(states[togglePack], toggleSwitch) == true ? false : true
+		);
+		publishValue(server, "state." + togglePack, states[togglePack]);
+	}
+
+	function showRoom(roomID)
+	{
+		$("#switches, #switchesHeading").show();
+		$(".room").removeClass("active");
+		$("#room" + roomID).addClass("active");
+
+		if (roomID == 0)
 		{
-			console.log("Toggling pack " + togglePack + " switch " + toggleSwitch);
-			states[togglePack] = SetSwitch(
-				states[togglePack], 
-				toggleSwitch, 
-				ReadSwitch(states[togglePack], toggleSwitch) == true ? false : true
-			);
-			publishValue(server, "state." + togglePack, states[togglePack]);
+			$(".switch").show();
+			$(".sensor").show();
 		}
-
-		// Function to set up the page
-		function init()
+		else
 		{
-			console.log("Loading...");
-
-			subscribeValue(server, "sensors", function (value) {
-				// unsubscribe for any existing subscriptions we've made
-				sensors.forEach(function (sensor) { unsubscribeValue(sensor); });
-				$('#test').html();
-
-				sensors = JSON.parse(value);
-
-				sensors.forEach(function (sensor)
+			packs.forEach(function (pack) {
+				if (pack.roomID == roomID)
 				{
-					$('#test').append("<div class='sensor' id='s" + sensor.sensorID + "'></div>");
+					$(".pack" + pack.packID).show();
+				}
+				else
+				{
+					$(".pack" + pack.packID).hide();
+				}
+			});
+		}
+	}
 
-					subscribeValue(server, "sensor." + sensor.sensorID, function (value) {
-						$("#s" + sensor.sensorID).text(sensor.name + ": " + parseFloat(value).toFixed(1) + "°" + sensor.unit); 
-					});
+	function draw(target)
+	{
+		return function(err, rendered) {
+	      if(err) throw err;
+	      $(target).html(rendered);
+	    }
+	}
+
+	function init()
+	{
+		console.log("Loading...");
+
+		subscribeValue(server, "switches", function (value) {
+			switches = JSON.parse(value);
+			ejs.renderAsync("views/switches.ejs", {"switches": switches}, draw("#switches"));
+		});
+
+		subscribeValue(server, "sensors", function (value) {
+			sensors = JSON.parse(value);
+			ejs.renderAsync("views/sensors.ejs", {"sensors": sensors}, draw("#sensors"));
+
+			sensors.forEach(function (sensor)
+			{
+				unsubscribeValue(sensor); // Remove any existing subscription
+				subscribeValue(server, "sensor." + sensor.sensorID, function (value) {
+					$("#s" + sensor.sensorID).text(sensor.name + ": " + parseFloat(value).toFixed(1) + "°" + sensor.unit); 
 				});
 			});
+		});
 
-			subscribeValue(server, "switches", function (value) {
-				switches = JSON.parse(value);
-				switches.forEach(function (item)
-				{
-					if (!item.enabled) { return; }
-					var switchDiv = $("<div class='switch' id='pack" + item.packID + "switch" + item.swID + "'>" + item.name + "</div>")
-					switchDiv.on("click", function ()
+		subscribeValue(server, "weather", function (value) {
+			weather = JSON.parse(value);
+			ejs.renderAsync("views/weather.ejs", {"weather": weather}, function (err, rendered) {
+				draw("#weather")(err, rendered);
+				// Load and run animated icons
+				var skycons = new Skycons({"color": "#80ffcA"});
+				skycons.add("tdIcon", weather.tdIcon);
+				skycons.add("tmIcon", weather.tmIcon);
+				skycons.play();	
+			});
+		});
+
+		subscribeValue(server, "rooms", function (value) {
+			rooms = JSON.parse(value);
+			ejs.renderAsync("./views/rooms.ejs", {"rooms": rooms}, draw("#rooms"));
+		});
+
+		subscribeValue(server, "packs", function (value) {
+			packs = JSON.parse(value);
+			packs.forEach(function (pack)
+			{
+				subscribeValue(server, "state." + pack.packID, function (value) {
+					states[pack.packID] = value;
+
+					switches.forEach(function (item)
 					{
-						toggle(item.packID, item.swID);
-					});
-					$('#switches').append(switchDiv);
-				});
-			});
-
-			subscribeValue(server, "packs", function (value) {
-				packs = JSON.parse(value);
-				packs.forEach(function (pack)
-				{
-					subscribeValue(server, "state." + pack.packID, function (value) {
-						states[pack.packID] = value;
-
-						switches.forEach(function (item)
+						if (!item.enabled) { return; }
+						$("#pack" + item.packID + "switch" + item.swID).removeClass("active");
+						if (ReadSwitch(states[item.packID], item.swID))
 						{
-							if (!item.enabled) { return; }
-							$("#pack" + item.packID + "switch" + item.swID).removeClass("active");
-							if (ReadSwitch(states[item.packID], item.swID))
-							{
-								$("#pack" + item.packID + "switch" + item.swID).addClass("active");
-							}
-						});
+							$("#pack" + item.packID + "switch" + item.swID).addClass("active");
+						}
 					});
 				});
 			});
-		}
-	</script>
+		});
+	}
+</script>
 </head>
 <body onload="init();">
-	<h1>DRMS</h1>
-	<h2>Sensors</h2>
-	<div id="test"></div>
-	<h2>Switches</h2>
-	<div id="switches"></div>
+<h1>DRMS</h1>
+<h2>Sensors</h2>
+<div id="sensors"></div>
+<h2 id="switchesHeading" style="display: none;">Switches</h2>
+<div id="switches"></div>
+<h2>Weather</h2>
+<div id="weather"></div>
+<h2>Rooms</h2>
+<div id="rooms"></div>
 </body>
 </html>

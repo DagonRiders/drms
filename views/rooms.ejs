@@ -1,0 +1,12 @@
+<% if (rooms.length) { %>
+	<ul id="rooms">
+    	<% rooms.forEach(function(item){ %>
+  			<li 
+  				class='room' 
+  				id='room<%= item.roomID %>'
+  				onclick='showRoom(<%= item.roomID %>)'
+  				><%= item.name %>
+  			</li>
+ 	    <% }) %>
+	</ul>
+<% } %>

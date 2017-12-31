@@ -1,0 +1,81 @@
+<div id="content-weather">
+	<div id="days">
+		<div id="td" class="day">
+			<div class="daySummary">
+				<div class="summaryIcon">
+					<canvas id="tdIcon" width="76px" height="76px"></canvas>
+				</div>
+				<div class="smWeatherText">today</div>
+			</div>
+			<div class="weatherDetails0">
+				<div class="feelsMax tempMax sdWeatherText">
+					<span id="tdFeelsMax"><%= parseInt(weather.tdFeelsMax) %></span>
+					<span class="unit">°C</span>
+				</div>
+				<div class="feelsMin tempMin sdWeatherText">
+					<span id="tdFeelsMin"><%= parseInt(weather.tdFeelsMin) %></span>
+					<span class="unit">°C</span>
+				</div>
+				<div class="sunrise smWeatherText sdWeatherText">
+					<span class="climacon sunrise" aria-hidden="true"></span>
+					<span id="tdSunrise"><%= pad(new Date(weather.tdSunrise).getHours(), 2) + ":" + pad(new Date(weather.tdSunrise).getMinutes(), 2)%></span>
+				</div>
+			</div>
+			<div class="weatherDetails1">
+				<div class="precipitation sdWeatherText">
+					<span class="climacon rain" aria-hidden="true"></span>
+					<span id="tdPrecip"><%= parseInt(weather.tdPrecip) %></span>
+					<span class="unit">%</span>
+				</div>
+				<div class="humidity sdWeatherText">
+					<span id="tdHumidity"><%= parseInt(weather.tdHumidity) %></span>
+					<span class="unit">%</span>
+				</div>
+			<div class="sunset smWeatherText sdWeatherText">
+				<span class="climacon sunset" aria-hidden="true"></span>
+				<span id="tdSunset"><%= pad(new Date(weather.tdSunset).getHours(), 2) + ":" + pad(new Date(weather.tdSunset).getMinutes(), 2) %></span>
+			</div>
+		</div>
+	</div>
+	<div id="tm" class="day">
+		<div class="daySummary">
+			<div class="summaryIcon">
+				<canvas id="tmIcon" width="76px" height="76px"></canvas>
+			</div>
+			<div class="smWeatherText">tomorrow</div>
+		</div>
+		<div class="weatherDetails0">
+			<div class="feelsMax tempMax sdWeatherText">
+				<span id="tmFeelsMax"><%= parseInt(weather.tmFeelsMin) %></span>
+				<span class="unit">°C</span>
+			</div>
+			<div class="feelsMin tempMin sdWeatherText">
+				<span id="tmFeelsMin"><%= parseInt(weather.tmFeelsMax) %></span>
+				<span class="unit">°C</span>
+			</div>
+			<div class="sunrise smWeatherText sdWeatherText">
+				<span class="climacon sunrise" aria-hidden="true"></span>
+				<span id="tmSunrise"><%= pad(new Date(weather.tmSunrise).getHours(), 2) + ":" + pad(new Date(weather.tmSunrise).getMinutes(), 2) %></span>
+			</div>
+		</div>
+		<div class="weatherDetails1">
+			<div class="precipitation sdWeatherText">
+				<span class="climacon rain" aria-hidden="true"></span>
+				<span id="tmPrecip"><%= parseInt(weather.tmPrecip) %></span>
+				<span class="unit">%</span>
+			</div>
+			<div class="humidity sdWeatherText">
+				<span id="tmHumidity"><%= parseInt(weather.tmHumidity) %></span>
+				<span class="unit">%</span>
+			</div>
+			<div class="sunset smWeatherText sdWeatherText">
+				<span class="climacon sunset" aria-hidden="true"></span>
+				<span id="tmSunset"><%= pad(new Date(weather.tmSunset).getHours(), 2) + ":" + pad(new Date(weather.tmSunset).getMinutes(), 2) %></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="summary">
+	<div id="wkPrecip"></div>
+	<div id="wkSummary"><%= weather.wkSummary %></div>
+</div>

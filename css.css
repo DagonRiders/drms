@@ -21,8 +21,25 @@ h2
 	display: flex;
 	flex-wrap: wrap;
 	width: 100%;
+	list-style-type: none;
+}
+#rooms
+{
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	list-style-type: none;
 }
 .switch
+{
+	padding: 1em;
+	border: 1px solid rgba(220, 240, 255, 0.2);
+	margin: 1em 1em 0em 0;
+	max-width: 300px;
+	min-width: 300px;
+	text-align: center;
+}
+.room
 {
 	padding: 1em;
 	border: 1px solid rgba(220, 240, 255, 0.2);
@@ -35,4 +52,220 @@ h2
 {
 	background: rgba(220, 240, 255, 1);
 	color: black;
+}
+@font-face {
+	font-family: 'Eurostile';
+	src: url('./fonts/EurostileLTStd-Ex2.otf');
+	font-weight: 700;
+}
+
+@font-face {
+	font-family: 'EurostileBold';
+	src: url('./fonts/EurostileLTStd-BoldEx2.otf');
+	font-weight: 700;
+}
+â€‹â€‹
+@font-face {
+	font-family: 'EurostileCondensed';
+	src: url('./fonts/EurostileLTStd-BoldEx2.otf');
+	font-weight: 700;
+}
+
+@font-face {
+	font-family: 'EurostileCondensed';
+	src: url('./fonts/EurostileLTStd-Cn.otf');
+	font-weight: normal;
+}
+
+body
+{
+	background-color: black;
+	font-family: 'EurostileCondensed', 'Helvetica Neue', sans-serif;
+	color: white;
+	margin-left: auto;
+	margin-right: auto;
+	cursor: default;
+}
+
+h2
+{
+	font-family: 'Eurostile';
+	margin-bottom: 0.5rem;
+	text-shadow: 0 0 10px #00fCaA;
+	font-weight: normal;
+	text-align: center;
+}
+
+h3
+{
+	font-family: 'Eurostile';
+	text-shadow: 0 0 10px #00fCaA;
+	font-weight: normal;
+	text-align: center;
+}
+
+a
+{
+	color: white;
+	text-decoration: none;
+	text-shadow: 0 0 10px #00fCaA;
+}
+
+.switch
+/*	Button Colouring for the switch off state. */	
+{
+	border: 2px solid #041406;
+	color: #6a8;
+	background: radial-gradient(ellipse at center, #006925 0%,#041406 100%); 
+	box-shadow: none;
+	text-shadow: 0 0 5px #184428;
+	opacity: 0.6;
+}
+
+.active
+/*	Button Colouring for the swtich on state. */	
+{
+	border: 2px solid #008C27;
+	color: #000;
+	background: radial-gradient(ellipse at center, #49FFB6 0%,#00AC4A 100%);
+	box-shadow: 0px 0px 10px 1px  #00AC4A;
+	text-shadow: 0 0 3px #BEFEE6;
+}
+
+.room
+/*	Button Colouring for the menu buttons. */	
+{
+	border: 1px solid rgb(100, 163, 180);
+	box-shadow: rgb(100, 163, 180) 0px 0px 10px 0px, rgb(100, 163, 180) 0px 0px 10px 0px inset;
+	color: rgb(160, 223, 250);
+	text-shadow: rgb(128, 213, 255) 0px 0px 20px;
+	background-color: rgb(0, 18, 50);
+}
+
+
+/* Weather Display */
+
+/* Two containers, one for today one for tomorrow. */
+
+#days
+{
+	display: flex;
+	flex-direction: column;
+	padding: 1em 0 0 0;
+	justify-content: center;
+}
+
+@media (min-width: 500px) 
+{
+	#days
+	{
+		flex-direction: row;
+	}
+}
+
+.sdWeatherText
+{
+	font-size: 2rem;
+  padding: 0 0.5em 0 0.5em;
+  text-align: center;
+}
+
+.smWeatherText
+{
+	font-size: 1rem;
+	padding: 0 0.5em 0 0.5em;
+	text-align: center;
+}
+
+.unit
+{
+	font-size: 0.5em;
+	position: relative; 
+	top: -0.9em;
+}
+
+/* All this is the column with the icon in it. */
+
+.day
+{
+	display: flex;
+	flex-direction: row;
+	width: 24rem;
+	justify-content: center;
+}
+
+#tm
+{
+	opacity: 0.55;
+}
+
+.daySummary
+{
+	color: #80ffcA;
+	text-shadow: 0 0 30px #00fCaA;
+}
+
+.summaryIcon
+{
+	height: 76px;
+}
+
+.climacon {
+    margin-right: 0.25em;
+}
+
+.summary p 
+{
+	margin: 0;
+	font-size: 50%;
+	text-align: left;
+}
+
+.weatherDetails0, .weatherDetails1
+{
+	width: 8rem;
+}
+
+/* Temparture display, feelsMax / feelsMin to be replaced with colour changing system. */
+
+.feelsMax
+{
+  color: #FFA090;
+  text-shadow: 0 0 30px #FF2C57;
+}
+
+.feelsMin
+{
+	color: #80EEFF;
+  text-shadow: 0 0 30px #0075F9;
+}
+
+.tempMax
+{
+  text-align: left;
+}
+
+.tempMin
+{
+  text-align: right;
+}
+
+.precipitation
+{
+	color: #E699FF;
+	text-shadow: 0 0 30px #8A00FC;
+}
+
+.humidity
+{
+	color: #FEF080;
+	text-shadow: 0 0 30px #C8C057;
+}
+
+/* Text below the weather information. */
+
+#summary
+{
+	padding: 1em 0 1.5em 0;
+	text-align: center;
 }

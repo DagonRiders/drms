@@ -1,0 +1,14 @@
+<% if (switches.length) { %>
+	<ul id="switches" style="display: none;">
+    	<% switches.forEach(function(item){ %>
+    		<% if (item.enabled) { %>
+      			<li 
+      				class='switch pack<%= item.packID %>' 
+      				id='pack<%= item.packID %>switch<%= item.swID %>'
+      				onclick='toggle(<%= item.packID %>, <%= item.swID %>);'
+      				><%= item.name %>    
+            </li>
+      		<% } %>
+ 	    <% }) %>
+	</ul>
+<% } %>
